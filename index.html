@@ -2,17 +2,36 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Sketch</title>
 
-    <link rel="stylesheet" type="text/css" href="style.css">
-
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script>
+      window.addEventListener(
+        "keydown",
+        function (e) {
+          if (
+            [
+              "Space",
+              "ArrowUp",
+              "ArrowDown",
+              "ArrowLeft",
+              "ArrowRight",
+            ].indexOf(e.code) > -1
+          ) {
+            e.preventDefault();
+          }
+        },
+        false
+      );
+    </script>
     <script src="libraries/p5.min.js"></script>
     <script src="libraries/p5.sound.min.js"></script>
+    <script src="util.js"></script>
     <script src="arena.js"></script>
     <script src="player.js"></script>
-    <script src="util.js"></script>
+    <script src="mechanic.js"></script>
   </head>
 
   <body>

@@ -1,7 +1,5 @@
 body {
   background: #f9f7f7;
-  height: 100%;
-  width: 100%;
   overflow: hidden;
   font-family: sans-serif;
 }
@@ -9,7 +7,7 @@ body {
 main {
   display: flex;
   align-items: center;
-  min-height: 75vh;
+  min-height: 85vh;
   padding: 2em;
   flex: 0 0 auto; /* Added rule */
 }

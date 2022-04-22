@@ -5,10 +5,6 @@ const CanvasCenter = { x: CanvasWidth / 2, y: CanvasHeight / 2 };
 
 const arena = new Arena(ArenaShape.Circle);
 
-function setStepDescription(desc) {
-  document.getElementById("stepDescription").innerHTML = desc;
-}
-
 let party = {
   tank1: new Player({
     role: PlayerRole.Tank,
@@ -52,65 +48,44 @@ let party = {
   }),
 };
 
-class Mechanic {
-  constructor(steps = []) {
-    this.steps = steps; // For now this will be a list of functions
-    this.currentStep = 0;
-    this.set_start_positions = () => {};
-  }
-
-  addStep(step) {
-    this.steps.push(step);
-  }
-
-  playNextStep() {
-    if (this.currentStep < this.steps.length) {
-      this.steps[this.currentStep++]()
+let mechanic = new Mechanic();
+mechanic.addStep(
+  new MechanicStep("Stack Center", () => {
+    for (let p of Object.values(party)) {
+      p.moveTo({ x: 0, y: 0 });
     }
-  }
-}
+  })
+);
+mechanic.addStep(
+  new MechanicStep("Spread to break chains", () => {
+    party.tank1.moveTo({ x: -238, y: 0 });
+    party.tank2.moveTo({ x: -238, y: 0 });
+    party.healer1.moveTo({ x: -238, y: 0 });
+    party.healer2.moveTo({ x: -238, y: 0 });
+    party.dps1.moveTo({ x: 238, y: 0 });
+    party.dps2.moveTo({ x: 238, y: 0 });
+    party.dps3.moveTo({ x: 238, y: 0 });
+    party.dps4.moveTo({ x: 238, y: 0 });
+  })
+);
+mechanic.addStep(
+  new MechanicStep("Move to intercept metors", () => {
+    party.tank2.moveTo({ x: -60, y: -150 });
+    party.tank1.moveTo({ x: -60, y: -50 });
+    party.healer1.moveTo({ x: -60, y: 50 });
+    party.healer2.moveTo({ x: -60, y: 150 });
+    party.dps1.moveTo({ x: 60, y: -150 });
+    party.dps2.moveTo({ x: 60, y: -50 });
+    party.dps3.moveTo({ x: 60, y: 50 });
+    party.dps4.moveTo({ x: 60, y: 150 });
+  })
+);
 
-let mechanic = new Mechanic()
-mechanic.set_start_positions = () => {
-  for (p of Object.values(party)) {
-    p.setPos(randomPos());
-    p.stopMovement();
-  }
-}
-mechanic.addStep(() => {
-  setStepDescription("Stack Center");
-  for (p of Object.values(party)) {
-    p.moveTo({x: 0, y: 0});
-  }
-});
-mechanic.addStep(() => {
-  setStepDescription("Spread to break chains")
-  party.tank1.moveTo({x: -238, y: 0});
-  party.tank2.moveTo({x: -238, y: 0});
-  party.healer1.moveTo({x: -238, y: 0});
-  party.healer2.moveTo({x: -238, y: 0});
-  party.dps1.moveTo({x: 238, y: 0});
-  party.dps2.moveTo({x: 238, y: 0});
-  party.dps3.moveTo({x: 238, y: 0});
-  party.dps4.moveTo({x: 238, y: 0});
-});
-mechanic.addStep(() => {
-  setStepDescription("Move to intercept meteors")
-  party.tank2.moveTo({x: -60, y: -150});
-  party.tank1.moveTo({x: -60, y: -50});
-  party.healer1.moveTo({x: -60, y: 50});
-  party.healer2.moveTo({x: -60, y: 150});
-  party.dps1.moveTo({x: 60, y: -150});
-  party.dps2.moveTo({x: 60, y: -50});
-  party.dps3.moveTo({x: 60, y: 50});
-  party.dps4.moveTo({x: 60, y: 150});
-});
-
-function set_clock_positions() {
+function setClockPositions() {
   destination = null;
   let radius = height / 4;
   let v = createVector(0, -radius);
-  for (p of Object.values(party)) {
+  for (let p of Object.values(party)) {
     p.setPos(v);
     v.rotate(45);
     p.stopMovement();
@@ -119,13 +94,12 @@ function set_clock_positions() {
 
 function setup() {
   createCanvas(CanvasWidth, CanvasHeight);
-  let stepdesc = document.createElement("p")
+  let stepdesc = document.createElement("p");
   stepdesc.setAttribute("id", "stepDescription");
   document.body.appendChild(stepdesc);
   angleMode(DEGREES);
   translate(width / 2, height / 2);
-  console.log("bnyeh");
-  mechanic.set_start_positions();
+  mechanic.setStartPositions();
 }
 
 function draw() {
@@ -134,7 +108,7 @@ function draw() {
 
   arena.draw();
 
-  for (p of Object.values(party)) {
+  for (let p of Object.values(party)) {
     p.draw();
   }
 
@@ -150,19 +124,21 @@ function mouseClicked() {}
 function mouseDragged() {}
 
 function keyPressed() {
-  if (keyCode === RIGHT_ARROW){
+  if (keyCode === RIGHT_ARROW) {
     mechanic.playNextStep();
+  }
+
+  if (keyCode === LEFT_ARROW) {
+    mechanic.stepBack();
   }
 }
 
 function keyTyped() {
-  if (key === 'r') {
-    mechanic.set_start_positions();
-    mechanic.currentStep = 0;
-    setStepDescription("")
+  if (key === "r") {
+    mechanic.reset();
   }
 
-  if (key === 'm') {
+  if (key === "m") {
     mCoords = translatedMouseCoords();
     navigator.clipboard.writeText(`{x: ${mCoords.x}, y: ${mCoords.y}}`);
   }
