@@ -82,7 +82,6 @@ mechanic.addStep(
 );
 
 function setClockPositions() {
-  destination = null;
   let radius = height / 4;
   let v = createVector(0, -radius);
   for (let p of Object.values(party)) {
@@ -139,7 +138,7 @@ function keyTyped() {
   }
 
   if (key === "m") {
-    mCoords = translatedMouseCoords();
+    let mCoords = translatedMouseCoords();
     navigator.clipboard.writeText(`{x: ${mCoords.x}, y: ${mCoords.y}}`);
   }
 }

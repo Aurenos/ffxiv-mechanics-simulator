@@ -15,7 +15,11 @@ class Arena {
     fill(255);
     switch (this.shape) {
       case ArenaShape.Square:
-        square(edgeThickness, edgeThickness, CanvasWidth - edgeThickness * 2);
+        square(
+          -width / 2 + edgeThickness,
+          -width / 2 + edgeThickness,
+          width - edgeThickness * 2
+        );
         break;
       case ArenaShape.Circle:
         circle(0, 0, CanvasWidth - edgeThickness);
