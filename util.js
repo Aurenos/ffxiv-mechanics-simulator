@@ -22,12 +22,6 @@ function polarToCartesian(theta, radius) {
   };
 }
 
-function isNearDestination(pos, dest, delta) {
-  let pVec = createVector(pos.x, pos.y)
-  let destVec = createVector(dest.x, dest.y)
-  return pVec.dist(destVec) < delta;
-}
-
 function randomPos() {
   let a = random(0, 360);
   let r = sqrt(random(0, width / 2 - width / 8));

@@ -28,16 +28,29 @@ class Player {
     this.labelMode = labelMode;
     this.labelFill = labelFill;
     this.movementDestination = null;
+    this.movementPath = [];
+    this.pathStep = 0;
     this.speed = 3;
   }
 
   draw() {
+    if (this.movementPath.length > 0) {
+      this.moveTo(this.movementPath[this.pathStep]);
+    }
+
     if (this.movementDestination !== null) {
-      if (!isNearDestination(this.pos, this.movementDestination, this.speed)) {
+      if (!this.isNearDestination()) {
         this.moveToward(this.movementDestination);
       } else {
         this.setPos(this.movementDestination);
         this.stopMovement();
+        if (
+          this.movementPath.length > 0 &&
+          ++this.pathStep >= this.movementPath.length
+        ) {
+          this.movementPath = [];
+          this.pathStep = 0;
+        }
       }
     }
 
@@ -84,27 +97,40 @@ class Player {
     this.pos.y = y;
   }
 
-  setPos({x, y}) {
+  setPos({ x, y }) {
     this.pos = { x, y };
   }
 
-  moveTo({x, y}) {
-    this.movementDestination = {x, y};
+  moveTo({ x, y }) {
+    this.movementDestination = { x, y };
+  }
+
+  movePath(path) {
+    this.movementPath = path;
   }
 
   stopMovement() {
     this.movementDestination = null;
   }
 
-  moveToward({x, y}) {
+  moveToward({ x, y }) {
     let start = createVector(this.pos.x, this.pos.y);
     let dest = createVector(x, y);
     let distance = dest.dist(start);
-    let mappedDistance = map(distance, 100, 0, this.speed, this.speed)
+    let mappedDistance = map(distance, 100, 0, this.speed, this.speed);
     dest.sub(start);
     dest.normalize();
     dest.mult(mappedDistance);
     start.add(dest);
     this.setPos(start);
+  }
+
+  isNearDestination() {
+    let pVec = createVector(this.pos.x, this.pos.y);
+    let destVec = createVector(
+      this.movementDestination.x,
+      this.movementDestination.y
+    );
+    return pVec.dist(destVec) < this.speed;
   }
 }
