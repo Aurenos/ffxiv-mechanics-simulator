@@ -30,7 +30,7 @@ class Player {
     this.movementDestination = null;
     this.movementPath = [];
     this.pathStep = 0;
-    this.speed = 3;
+    this.speed = 2.5;
   }
 
   draw() {
@@ -101,7 +101,14 @@ class Player {
     this.pos = { x, y };
   }
 
-  moveTo({ x, y }) {
+  moveTo({ x, y }, fuzzFactor = null) {
+    if (fuzzFactor !== null) {
+      fuzzFactor = abs(fuzzFactor); // in case a negative number was supplied for some reason
+      let xAdjust = randRange(-fuzzFactor, fuzzFactor);
+      let yAdjust = randRange(-fuzzFactor, fuzzFactor);
+      x += xAdjust;
+      y += yAdjust;
+    }
     this.movementDestination = { x, y };
   }
 

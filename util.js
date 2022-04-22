@@ -33,3 +33,9 @@ function randomPos() {
   y = cy * floor(r * r * sin(a));
   return {x, y};
 }
+
+function randRange(min, max) {
+  min = ceil(min);
+  max = floor(max);
+  return floor(random() * (max - min + 1)) + min;
+}

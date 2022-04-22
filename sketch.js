@@ -2,6 +2,7 @@ const Debug = true;
 const CanvasWidth = 550;
 const CanvasHeight = 550;
 const CanvasCenter = { x: CanvasWidth / 2, y: CanvasHeight / 2 };
+const ArenaCenter = { x: 0, y: 0 };
 
 const arena = new Arena(ArenaShape.Circle);
 
@@ -52,24 +53,41 @@ let mechanic = new Mechanic();
 mechanic.addStep(
   new MechanicStep("Stack Center", () => {
     for (let p of Object.values(party)) {
-      p.moveTo({ x: 0, y: 0 });
+      p.moveTo(ArenaCenter, 10);
     }
   })
 );
 mechanic.addStep(
   new MechanicStep("Spread to break chains", () => {
-    party.tank1.moveTo({ x: -238, y: 0 });
-    party.tank2.moveTo({ x: -238, y: 0 });
-    party.healer1.moveTo({ x: -238, y: 0 });
-    party.healer2.moveTo({ x: -238, y: 0 });
-    party.dps1.moveTo({ x: 238, y: 0 });
-    party.dps2.moveTo({ x: 238, y: 0 });
-    party.dps3.moveTo({ x: 238, y: 0 });
-    party.dps4.moveTo({ x: 238, y: 0 });
+    let breakLength = 350;
+    let tetherColor = "purple";
+    let stackFuzziness = 10;
+    mechanic.addFieldObject(
+      new Tether(party.tank1, party.dps1, { tetherColor, breakLength })
+    );
+    mechanic.addFieldObject(
+      new Tether(party.tank2, party.dps2, { tetherColor, breakLength })
+    );
+    mechanic.addFieldObject(
+      new Tether(party.healer1, party.dps3, { tetherColor, breakLength })
+    );
+    mechanic.addFieldObject(
+      new Tether(party.healer2, party.dps4, { tetherColor, breakLength })
+    );
+
+    party.tank1.moveTo({ x: -238, y: 0 }, stackFuzziness);
+    party.tank2.moveTo({ x: -238, y: 0 }, stackFuzziness);
+    party.healer1.moveTo({ x: -238, y: 0 }, stackFuzziness);
+    party.healer2.moveTo({ x: -238, y: 0 }, stackFuzziness);
+    party.dps1.moveTo({ x: 238, y: 0 }, stackFuzziness);
+    party.dps2.moveTo({ x: 238, y: 0 }, stackFuzziness);
+    party.dps3.moveTo({ x: 238, y: 0 }, stackFuzziness);
+    party.dps4.moveTo({ x: 238, y: 0 }, stackFuzziness);
   })
 );
 mechanic.addStep(
   new MechanicStep("Move to intercept metors", () => {
+    mechanic.clearFieldObjects();
     party.tank2.moveTo({ x: -60, y: -150 });
     party.tank1.moveTo({ x: -60, y: -50 });
     party.healer1.moveTo({ x: -60, y: 50 });
@@ -106,6 +124,10 @@ function draw() {
   translate(width / 2, height / 2);
 
   arena.draw();
+
+  for (fieldObject of mechanic.fieldObjects) {
+    fieldObject.draw();
+  }
 
   for (let p of Object.values(party)) {
     p.draw();
