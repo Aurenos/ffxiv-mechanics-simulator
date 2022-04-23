@@ -145,14 +145,14 @@ class Player {
 }
 
 let defaultParty = {
-  tank1: new Player(PlayerRole.Tank),
-  tank2: new Player(PlayerRole.Tank),
-  healer1: new Player(PlayerRole.Healer),
-  healer2: new Player(PlayerRole.Healer),
-  dps1: new Player(PlayerRole.DPS),
-  dps2: new Player(PlayerRole.DPS),
-  dps3: new Player(PlayerRole.DPS),
-  dps4: new Player(PlayerRole.DPS),
+  tank1: new Player(PlayerRole.Tank, { label: 1 }),
+  tank2: new Player(PlayerRole.Tank, { label: 2 }),
+  healer1: new Player(PlayerRole.Healer, { label: 1 }),
+  healer2: new Player(PlayerRole.Healer, { label: 2 }),
+  dps1: new Player(PlayerRole.DPS, { label: 1 }),
+  dps2: new Player(PlayerRole.DPS, { label: 2 }),
+  dps3: new Player(PlayerRole.DPS, { label: 3 }),
+  dps4: new Player(PlayerRole.DPS, { label: 4 }),
 };
 
 let detailedParty = {

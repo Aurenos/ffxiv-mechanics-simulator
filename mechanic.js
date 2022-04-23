@@ -71,6 +71,38 @@ class Mechanic {
     this.fieldObjects[this.currentStep].push(fieldObject);
   }
 
+  getFieldObjectById(id) {
+    if (id === null || id === undefined) return;
+
+    for (const key in this.fieldObjects) {
+      for (let obj of this.fieldObjects[key]) {
+        if (obj.id === id) {
+          return obj;
+        }
+      }
+    }
+  }
+
+  removeFieldObject(id) {
+    if (id === null || id === undefined) return;
+    let targetKey = null;
+    let targetIndex = null;
+    for (const key in this.fieldObjects) {
+      for (const [index, obj] of this.fieldObjects[key].entries()) {
+        if (obj.id === id) {
+          targetKey = key;
+          targetIndex = index;
+          break;
+        }
+      }
+    }
+    if (targetKey === null || targetIndex === null) {
+      console.log(`No fieldObject exists with ID ${id}. Nothing to remove.`);
+    } else {
+      this.fieldObjects[targetKey].splice(targetIndex, 1);
+    }
+  }
+
   clearFieldObjects(step = null) {
     if (step === null) {
       this.fieldObjects = {};
@@ -78,12 +110,17 @@ class Mechanic {
       delete this.fieldObjects[step];
     }
   }
+
+  clearLastStepFieldObjects() {
+    this.clearFieldObjects(this.currentStep - 1);
+  }
 }
 
 class MechanicStep {
-  constructor(description, mechanicFn) {
+  constructor(description, mechanicFn, id = null) {
     this.description = description;
     this.mechanicFn = mechanicFn;
+    this.id = id;
   }
 
   play() {
