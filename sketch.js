@@ -6,48 +6,6 @@ const ArenaCenter = { x: 0, y: 0 };
 
 const arena = new Arena(ArenaShape.Circle);
 
-let party = {
-  tank1: new Player({
-    role: PlayerRole.Tank,
-    label: "Cygnas",
-    labelMode: LabelMode.Floating,
-  }),
-  dps4: new Player({
-    role: PlayerRole.DPS,
-    label: "Raez",
-    labelMode: LabelMode.Floating,
-  }),
-  healer2: new Player({
-    role: PlayerRole.Healer,
-    label: "Jaro",
-    labelMode: LabelMode.Floating,
-  }),
-  dps1: new Player({
-    role: PlayerRole.DPS,
-    label: "Brick",
-    labelMode: LabelMode.Floating,
-  }),
-  tank2: new Player({
-    role: PlayerRole.Tank,
-    label: "Mouse",
-    labelMode: LabelMode.Floating,
-  }),
-  dps2: new Player({
-    role: PlayerRole.DPS,
-    label: "Waifu",
-    labelMode: LabelMode.Floating,
-  }),
-  healer1: new Player({
-    role: PlayerRole.Healer,
-    label: "R'hian",
-    labelMode: LabelMode.Floating,
-  }),
-  dps3: new Player({
-    role: PlayerRole.DPS,
-    label: "Jonsi",
-    labelMode: LabelMode.Floating,
-  }),
-};
 
 let mechanic = new Mechanic();
 mechanic.addStep(
@@ -125,8 +83,10 @@ function draw() {
 
   arena.draw();
 
-  for (fieldObject of mechanic.fieldObjects) {
-    fieldObject.draw();
+  for (fieldObjectKey in mechanic.fieldObjects) {
+    for (fieldObject of mechanic.fieldObjects[fieldObjectKey]) {
+      fieldObject.draw();
+    }
   }
 
   for (let p of Object.values(party)) {

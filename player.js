@@ -15,12 +15,14 @@ const LabelFill = {
 };
 
 class Player {
-  constructor({
+  constructor(
     role,
-    label = null,
-    labelMode = LabelMode.Center,
-    labelFill = LabelFill.Black,
-  }) {
+    {
+      label = null,
+      labelMode = LabelMode.Center,
+      labelFill = LabelFill.Black,
+    } = {}
+  ) {
     this.role = role;
     this.pos = { x: 0, y: 0 };
     this.size = 24;
@@ -141,3 +143,51 @@ class Player {
     return pVec.dist(destVec) < this.speed;
   }
 }
+
+let defaultParty = {
+  tank1: new Player(PlayerRole.Tank),
+  tank2: new Player(PlayerRole.Tank),
+  healer1: new Player(PlayerRole.Healer),
+  healer2: new Player(PlayerRole.Healer),
+  dps1: new Player(PlayerRole.DPS),
+  dps2: new Player(PlayerRole.DPS),
+  dps3: new Player(PlayerRole.DPS),
+  dps4: new Player(PlayerRole.DPS),
+};
+
+let detailedParty = {
+  tank1: new Player(PlayerRole.Tank, {
+    label: "Cygnas",
+    labelMode: LabelMode.Floating,
+  }),
+  dps4: new Player(PlayerRole.DPS, {
+    label: "Raez",
+    labelMode: LabelMode.Floating,
+  }),
+  healer2: new Player(PlayerRole.Healer, {
+    label: "Jaro",
+    labelMode: LabelMode.Floating,
+  }),
+  dps1: new Player(PlayerRole.DPS, {
+    label: "Brick",
+    labelMode: LabelMode.Floating,
+  }),
+  tank2: new Player(PlayerRole.Tank, {
+    label: "Mouse",
+    labelMode: LabelMode.Floating,
+  }),
+  dps2: new Player(PlayerRole.DPS, {
+    label: "Waifu",
+    labelMode: LabelMode.Floating,
+  }),
+  healer1: new Player(PlayerRole.Healer, {
+    label: "R'hian",
+    labelMode: LabelMode.Floating,
+  }),
+  dps3: new Player(PlayerRole.DPS, {
+    label: "Jonsi",
+    labelMode: LabelMode.Floating,
+  }),
+};
+
+let party = defaultParty;

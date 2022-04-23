@@ -51,6 +51,7 @@ class Mechanic {
       for (let p in previousPositions) {
         party[p].setPos(previousPositions[p]);
       }
+      this.clearFieldObjects(this.currentStep);
       if (--this.currentStep === 0) {
         this.clearStepDescription();
       } else {
@@ -64,11 +65,18 @@ class Mechanic {
   }
 
   addFieldObject(fieldObject) {
-    this.fieldObjects.push(fieldObject);
+    if (!this.fieldObjects[this.currentStep]) {
+      this.fieldObjects[this.currentStep] = [];
+    }
+    this.fieldObjects[this.currentStep].push(fieldObject);
   }
 
-  clearFieldObjects() {
-    this.fieldObjects = [];
+  clearFieldObjects(step = null) {
+    if (step === null) {
+      this.fieldObjects = {};
+    } else {
+      delete this.fieldObjects[step];
+    }
   }
 }
 
@@ -85,37 +93,5 @@ class MechanicStep {
 
   displayStepDescription() {
     document.getElementById("stepDescription").innerHTML = this.description;
-  }
-}
-
-class Tether {
-  constructor(obj1, obj2, { tetherColor = "orange", breakLength = null }) {
-    this.obj1 = obj1;
-    this.obj2 = obj2;
-    this.tetherColor = color(tetherColor);
-    this.breakLength = breakLength;
-  }
-
-  draw() {
-    if (this.shouldDraw()) {
-      strokeWeight(4);
-      this.tetherColor.setAlpha(100);
-      stroke(this.tetherColor);
-      line(this.obj1.pos.x, this.obj1.pos.y, this.obj2.pos.x, this.obj2.pos.y);
-    }
-  }
-
-  getObjDistance() {
-    let v1 = createVector(this.obj1.pos.x, this.obj1.pos.y);
-    let v2 = createVector(this.obj2.pos.x, this.obj2.pos.y);
-    return v1.dist(v2);
-  }
-
-  shouldDraw() {
-    if (this.breakLength === null) {
-      return true;
-    } else {
-      return this.getObjDistance() < this.breakLength;
-    }
   }
 }
